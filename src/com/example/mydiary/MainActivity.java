@@ -1,7 +1,5 @@
 package com.example.mydiary;
 
-
-
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -14,11 +12,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-
-public class MainActivity extends Activity implements OnClickListener, OnItemClickListener{
-	private Button btnWrite ;
-	private Button btnRefresh ;
+public class MainActivity extends Activity implements OnClickListener,
+		OnItemClickListener {
+	private Button btnWrite;
+	private Button btnRefresh;
 	private ListView list;
 	ArrayList<ListData> listDataArray = new ArrayList<ListData>();
 
@@ -26,58 +25,63 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		btnWrite = (Button)findViewById(R.id.write);
-		btnRefresh = (Button)findViewById(R.id.refresh);
-		list = (ListView)findViewById(R.id.lineList);
-		
+
+		btnWrite = (Button) findViewById(R.id.write);
+		btnRefresh = (Button) findViewById(R.id.refresh);
+		list = (ListView) findViewById(R.id.lineList);
+
 		btnWrite.setOnClickListener(this);
 		btnRefresh.setOnClickListener(this);
 		list.setOnItemClickListener(this);
-		
-		for(int i = 0; i <10; i ++){
-			ListData data = new ListData(i+"-1:lineTitle",i+"-2:lineText",i+".jpg");
+
+		for (int i = 0; i < 10; i++) {
+			ListData data = new ListData(i + "-1:lineTitle", i + "-2:lineText",
+					(i + 1)+ ".jpg");
 			listDataArray.add(data);
 		}
-		ListView listView = (ListView)findViewById(R.id.lineList);
-		
-		ListAdapter listAdapter = new ListAdapter(this, R.layout.list_line1, listDataArray);//에러가 난다면 두번째 인자..
+		ListView listView = (ListView) findViewById(R.id.lineList);
+
+		ListAdapter listAdapter = new ListAdapter(this, R.layout.list_line1,
+				listDataArray);// 에러가 난다면 두번째 인자..
 		listView.setAdapter(listAdapter);
 		listView.setOnItemClickListener(this);
-		
-		
+
 	}
 
 	@Override
 	public void onClick(View v) {
-		try{
-		switch (v.getId()){
-		case R.id.write:
-			Intent writeIntent = new Intent (this, Write.class);
-			startActivity(writeIntent);
-			break;
-		case R.id.refresh:
-			Intent refresh = new Intent( this, MainActivity.class);
-			startActivity(refresh);
-			break;
-		case R.id.lineList:
-			Intent line1 = new Intent(this,ListLine1.class);
-			startActivity(line1);			
-			break;
-		
-			
-		}
-		}catch(Exception e){
-			Log.e("main",e.getMessage());
+		try {
+			switch (v.getId()) {
+			case R.id.write:
+				Intent writeIntent = new Intent(this, Write.class);
+				startActivity(writeIntent);
+				break;
+			case R.id.refresh:
+				Intent refresh = new Intent(this, MainActivity.class);
+				startActivity(refresh);
+				break;
+			// case R.id.lineList:
+			// Intent line1 = new Intent(this, Show.class);
+			// startActivity(line1);
+			// break;
+			}
+
+		} catch (Exception e) {
+			Log.e("main", e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onItemClick(AdapterView<?> adapterView, View view,
+			int position, long id) {
+		Log.i("checkOnItemClick: ", position + "empty");
+		Log.i("id", id + "dd");
+		Intent intent = new Intent(this, Show.class);
+		intent.putExtra("no", position);
+		startActivity(intent);
+		// 지금부터 해야 할 것. 클릭하면 show 페이지로 아이디랑 포지션을 넘겨주어야 할 것입니다.
 
+	}
 
 }

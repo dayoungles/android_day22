@@ -14,45 +14,51 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ListAdapter extends ArrayAdapter<ListData>{
+public class ListAdapter extends ArrayAdapter<ListData> {
 	private Context context;
 	private int layoutResourceId;
 	private ArrayList<ListData> listData;
 
-	public ListAdapter (Context context, int layoutResourceId, ArrayList<ListData> listData){
+	public ListAdapter(Context context, int layoutResourceId,
+			ArrayList<ListData> listData) {
 		super(context, layoutResourceId, listData);
 		this.context = context;
 		this.layoutResourceId = layoutResourceId;
 		this.listData = listData;
 	}
+
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(int position, View convertView, ViewGroup parent) {
 		View row = convertView;
-		
-		if (row == null){
-			LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-			row = inflater.inflate(layoutResourceId, parent, false);
-		}
-		
-		TextView tvText1 = (TextView) row.findViewById(R.id.lineTitle);
-		TextView tvText2 = (TextView) row.findViewById(R.id.lineText);
-		
-		tvText1.setText(listData.get(position).getText1());
-		tvText2.setText(listData.get(position).getText2());
-		
-		ImageView imageView = (ImageView)row.findViewById(R.id.lineImage);
-		
-		try{
-			InputStream is = context.getAssets().open(listData.get(position).getImgName());
+
+		try {
+			Log.i("in check", "djkfldjs");
+			if (row == null) {
+				LayoutInflater inflater = ((Activity) context)
+						.getLayoutInflater();
+				row = inflater.inflate(layoutResourceId, parent, false);
+			}
+
+			TextView tvText1 = (TextView) row.findViewById(R.id.lineTitle);
+			TextView tvText2 = (TextView) row.findViewById(R.id.lineText);
+
+			tvText1.setText(listData.get(position).getText1());
+			tvText2.setText(listData.get(position).getText2());
+
+			ImageView imageView = (ImageView) row.findViewById(R.id.lineImage);
+			InputStream is = context.getAssets().open(
+					listData.get(position).getImgName());
 			Drawable d = Drawable.createFromStream(is, null);
 			imageView.setImageDrawable(d);
-		}catch(IOException e){
+			Log.i("check", tvText1.getText().toString());
+		} catch (IOException e) {
 			e.printStackTrace();
-			Log.e("error","error getview");
+			Log.e("ListAdapter", e.getMessage());
 		}
-		
+
 		return row;
-		
+
 	}
 }
