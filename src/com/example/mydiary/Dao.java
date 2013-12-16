@@ -45,42 +45,47 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 	 * 사진명
 	 */
 	public String getJsonTestData() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("");
+			try {
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("");
+			sb.append("[");
 
-		sb.append("[");
+			sb.append("      {");
+			sb.append("         'ArticleNumber':'1',");
+			sb.append("         'Title':'오늘도 좋은 하루',");
+			sb.append("         'Writer':'학생1',");
+			sb.append("         'Id':'6613d02f3e2153283f23bf621145f877',");
+			sb.append("         'Content':'하지만 곧 기말고사지...',");
+			sb.append("         'WriteDate':'2013-09-23-10-10',");
+			sb.append("         'ImgName':'photo1.jpg'");
+			sb.append("      },");
+			sb.append("      {");
+			sb.append("         'ArticleNumber':'2',");
+			sb.append("         'Title':'대출 최고 3000만원',");
+			sb.append("         'Writer':'김미영 팀장',");
+			sb.append("         'Id':'6326d02f3e2153266f23bf621145f734',");
+			sb.append("         'Content':'김미영팀장입니다. 고갱님께서는 최저이율로 최고 3000만원까지 30분 이내 통장입금가능합니다.',");
+			sb.append("         'WriteDate':'2013-09-24-11-22',");
+			sb.append("         'ImgName':'photo2.jpg'");
+			sb.append("      },");
+			sb.append("      {");
+			sb.append("         'ArticleNumber':'3',");
+			sb.append("         'Title':'MAC등록신청',");
+			sb.append("         'Writer':'학생2',");
+			sb.append("         'Id':'8426d02f3e2153283246bf6211454262',");
+			sb.append("         'Content':'1a:2b:3c:4d:5e:6f',");
+			sb.append("         'WriteDate':'2013-09-25-12-33',");
+			sb.append("         'ImgName':'photo3.jpg'");
+			sb.append("      }");
 
-		sb.append("      {");
-		sb.append("         'ArticleNumber':'1',");
-		sb.append("         'Title':'오늘도 좋은 하루',");
-		sb.append("         'Writer':'학생1',");
-		sb.append("         'Id':'6613d02f3e2153283f23bf621145f877',");
-		sb.append("         'Content':'하지만 곧 기말고사지...',");
-		sb.append("         'WriteDate':'2013-09-23-10-10',");
-		sb.append("         'ImgName':'photo1.jpg'");
-		sb.append("      },");
-		sb.append("      {");
-		sb.append("         'ArticleNumber':'2',");
-		sb.append("         'Title':'대출 최고 3000만원',");
-		sb.append("         'Writer':'김미영 팀장',");
-		sb.append("         'Id':'6326d02f3e2153266f23bf621145f734',");
-		sb.append("         'Content':'김미영팀장입니다. 고갱님께서는 최저이율로 최고 3000만원까지 30분 이내 통장입금가능합니다.',");
-		sb.append("         'WriteDate':'2013-09-24-11-22',");
-		sb.append("         'ImgName':'photo2.jpg'");
-		sb.append("      },");
-		sb.append("      {");
-		sb.append("         'ArticleNumber':'3',");
-		sb.append("         'Title':'MAC등록신청',");
-		sb.append("         'Writer':'학생2',");
-		sb.append("         'Id':'8426d02f3e2153283246bf6211454262',");
-		sb.append("         'Content':'1a:2b:3c:4d:5e:6f',");
-		sb.append("         'WriteDate':'2013-09-25-12-33',");
-		sb.append("         'ImgName':'photo3.jpg'");
-		sb.append("      }");
+			sb.append("]");
 
-		sb.append("]");
-
+			return sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.i("getJsonTestData", e.getMessage());
+		}
 		return sb.toString();
 	}
 
@@ -107,7 +112,8 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 				writedate = jObj.getString("WriteDate");
 				imgName = jObj.getString("ImgName");
 
-				Log.i("test", "ArticleNumber :::" + articleNumber + "Title : "+ title);
+				Log.i("test", "ArticleNumber :::" + articleNumber + "Title : "
+						+ title);
 				// String sql =
 				// "INSERT INTO Articles (ArticleNumber, Title, WriterName, WriterID, Content, WriterDate,ImgName) Values("
 				// +article+
@@ -142,22 +148,28 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 
 		String sql = "select * from Articles;";
 		Cursor cursor = database.rawQuery(sql, null);
+		try {
+			while (cursor.moveToNext()) {
+				articleNumber = cursor.getString(1);
+				title = cursor.getString(2);
+				writer = cursor.getString(3);
+				id = cursor.getString(4);
+				content = cursor.getString(5);
+				writedate = cursor.getString(6);
+				imgName = cursor.getString(7);
 
-		while (cursor.moveToNext()) {
-			articleNumber = cursor.getString(1);
-			title = cursor.getString(2);
-			writer = cursor.getString(3);
-			id = cursor.getString(4);
-			content = cursor.getString(5);
-			writedate = cursor.getString(6);
-			imgName = cursor.getString(7);
+				articleList.add(new Article(articleNumber, title, writer, id,
+						content, writedate, imgName));
+			}
+			cursor.close();
 
-			articleList.add(new Article(articleNumber, title, writer, id,
-					content, writedate, imgName));
+			return articleList;
+		} catch (Exception e) {
+			Log.i("getArticleList", e.getMessage());
+			e.printStackTrace();
 		}
-		cursor.close();
-
 		return articleList;
+
 	}
 
 	public Article getArticleByArticleNumber(String articleNumber) {
@@ -174,21 +186,27 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 		String sql = "select * from Articles where ArticleNumber ="
 				+ articleNumber + ";";
 		Cursor cursor = database.rawQuery(sql, null);
+		try {
+			if (cursor.moveToNext()) {// 커서는 원래 첫번째 레코드가 아니라 desc를 가리키고 있으니까.
+										// 넘겨줘야지.
+				// articleNumber = cursor.getString(1);
+				title = cursor.getString(2);
+				writer = cursor.getString(3);
+				id = cursor.getString(4);
+				content = cursor.getString(5);
+				writedate = cursor.getString(6);
+				imgName = cursor.getString(7);
 
-		if (cursor.moveToNext()) {// 커서는 원래 첫번째 레코드가 아니라 desc를 가리키고 있으니까. 넘겨줘야지.
-			// articleNumber = cursor.getString(1);
-			title = cursor.getString(2);
-			writer = cursor.getString(3);
-			id = cursor.getString(4);
-			content = cursor.getString(5);
-			writedate = cursor.getString(6);
-			imgName = cursor.getString(7);
+				article = new Article(articleNumber + "", title, writer, id,
+						content, writedate, imgName);
+			}
+			cursor.close();
 
-			article = new Article(articleNumber + "", title, writer, id,
-					content, writedate, imgName);
+			return article;
+		} catch (Exception e) {
+			Log.i("getArticleByArticleNumber", e.getMessage());
+			e.printStackTrace();
 		}
-		cursor.close();
-
-		return article;
+		return article;//여기 이래도 되나??
 	}
 }

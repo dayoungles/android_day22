@@ -12,11 +12,4 @@ public class Write extends Activity {
 		setContentView(R.layout.write);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.write, menu);
-		return true;
-	}
-
 }

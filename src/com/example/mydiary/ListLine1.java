@@ -16,6 +16,7 @@ public class ListLine1 extends Activity implements OnItemClickListener{
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		try{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_line1);
 		
@@ -28,6 +29,10 @@ public class ListLine1 extends Activity implements OnItemClickListener{
 		ListAdapter listAdapter = new ListAdapter(this, R.layout.list_line1, listDataArray);//에러가 난다면 두번째 인자..
 		listView.setAdapter(listAdapter);
 		listView.setOnItemClickListener(this);
+		} catch(Exception e){
+			e.printStackTrace();
+			Log.i("onCreate", e.getMessage());
+		}
 		
 	}
 

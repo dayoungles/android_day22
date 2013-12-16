@@ -19,6 +19,7 @@ public class Show extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show);
 		
+		try{
 		TextView title = (TextView) findViewById(R.id.showTitle);
 		TextView contents = (TextView) findViewById(R.id.text);
 		ImageView image = (ImageView) findViewById(R.id.image);
@@ -56,13 +57,10 @@ public class Show extends Activity {
 			e.printStackTrace();
 			Log.e("inputStream error", "error" + e.getMessage());
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.show, menu);
-		return true;
+		}catch(Exception e){
+			Log.i ("OnCreate", e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 }
