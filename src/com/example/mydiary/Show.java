@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,32 +18,44 @@ public class Show extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show);
-		Intent intent = getIntent();
-		int no = intent.getIntExtra("no", -1);
-		if (no == -1) {
-			finish();
-		}
-		ListData data = new ListData(no + "-1:lineTitle", no + "-2:lineText",
-				(no + 1) + ".jpg");
-
+		
 		TextView title = (TextView) findViewById(R.id.showTitle);
 		TextView contents = (TextView) findViewById(R.id.text);
 		ImageView image = (ImageView) findViewById(R.id.image);
-
-		title.setText(data.getText1());
-		contents.setText(data.getText2());
-
-		InputStream is;
+		//이것말고도 글쓴 사람, 날짜....뭐 이런 것까지 모두 만들어줘야된다;;
+		
+		String articleNumber = getIntent().getExtras().getString("ArticleNumber");
+		Log.i("articleNumber",articleNumber);
+		//Intent intent = getIntent();
+		Dao dao = new Dao(getApplicationContext());
+		
+		Article article = dao.getArticleByArticleNumber(articleNumber);
+		
+		title.setText(article.getTitle());
+		contents.setText(article.getContent());
+		
+//		
+//		int no = intent.getIntExtra("ArticleNumber", -1);
+//		if (no == -1) {
+//			finish();
+//		}
+//		ListData data = new ListData(no + "-1:lineTitle", no + "-2:lineText",
+//				(no + 1) + ".jpg");
+//
+//
+//		title.setText(data.getText1());
+//		contents.setText(data.getText2());
+//
 		try {
-			is = getAssets().open(data.getImgName());
-			Drawable d = Drawable.createFromStream(is, null);
+			InputStream ims;
+			ims = getApplicationContext().getAssets().open(article.getImgName());
+			Drawable d = Drawable.createFromStream(ims, null);
 			image.setImageDrawable(d);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.e("inputStream error", "error" + e.getMessage());
 		}
-
-		// no 로 어떻게든 해. ㅋㅋㅋ
 	}
 
 	@Override
