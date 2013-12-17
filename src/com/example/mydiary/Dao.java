@@ -45,9 +45,9 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 	 * 사진명
 	 */
 	public String getJsonTestData() {
-			StringBuilder sb = new StringBuilder();
-			sb.append("");
-			try {
+		StringBuilder sb = new StringBuilder();
+		sb.append("");
+		try {
 
 			sb.append("[");
 
@@ -168,7 +168,7 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 			Log.i("getArticleList", e.getMessage());
 			e.printStackTrace();
 		}
-		return articleList;
+		return null;
 
 	}
 
@@ -207,6 +207,6 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 			Log.i("getArticleByArticleNumber", e.getMessage());
 			e.printStackTrace();
 		}
-		return article;//여기 이래도 되나??
+		return null;//  try에서 return을 만나면 그냥 끝나서 상관없지만 캐치는 지금 리턴이 없기 때문에 리턴을 잘못주면 망함.
 	}
 }

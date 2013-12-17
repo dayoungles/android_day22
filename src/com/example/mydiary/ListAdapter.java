@@ -58,7 +58,7 @@ public class ListAdapter extends ArrayAdapter<ListData> {
 			Log.e("ListAdapter", e.getMessage());
 		}
 
-		return row;
+		return null;
 
 	}
 }
