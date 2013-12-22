@@ -44,7 +44,7 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 	 * - 글제목 문자열 Writer - 작성자 Id - 작성자ID Content - 글내용 WriteDate - 작성일 ImgName -
 	 * 사진명
 	 */
-	public String getJsonTestData() {
+	public String getJsonTestData() {//삭제 예정 
 		StringBuilder sb = new StringBuilder();
 		sb.append("");
 		try {
@@ -91,6 +91,7 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 
 	public void insertJsonData(String jsonData) {
 
+		FileDownloader fileDownLoader = new FileDownloader(context);
 		String articleNumber;
 		String title;
 		String writer;
@@ -100,7 +101,7 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 		String imgName;
 
 		try {
-			JSONArray jArr = new JSONArray(jsonData);
+			JSONArray jArr = new JSONArray(jsonData);//이녀석이 제이슨을 중괄호 단위로 잘라주었네.
 
 			for (int i = 0; i < jArr.length(); i++) {
 				JSONObject jObj = jArr.getJSONObject(i);
@@ -127,6 +128,7 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 					Log.e("test", "DB error" + e);
 					e.printStackTrace();
 				}
+				fileDownLoader.downFile("http://10.73.44.93/~stu09/image/"+imgName, imgName);
 			}
 
 		} catch (JSONException e) {

@@ -1,10 +1,13 @@
 package com.example.mydiary;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +38,14 @@ public class Show extends Activity {
 
 			title.setText(article.getTitle());
 			contents.setText(article.getContent());
+			
+			String img_path = getApplicationContext().getFilesDir().getPath()+"/" + article.getImgName();
+			File img_load_path = new File(img_path);
+			
+			if(img_load_path.exists()){
+				Bitmap bitmap = BitmapFactory.decodeFile(img_path);
+				image.setImageBitmap(bitmap);
+			}
 
 			//
 			// int no = intent.getIntExtra("ArticleNumber", -1);
@@ -49,6 +60,7 @@ public class Show extends Activity {
 			// title.setText(data.getText1());
 			// contents.setText(data.getText2());
 			//
+			/*
 			try {
 				InputStream ims;
 				ims = getApplicationContext().getAssets().open(
@@ -64,6 +76,10 @@ public class Show extends Activity {
 			Log.i("OnCreate", e.getMessage());
 			e.printStackTrace();
 		}
+		*/
+			
+	}catch(Exception e){
+		e.printStackTrace();
 	}
-
+}
 }

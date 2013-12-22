@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,11 +13,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener,
 		OnItemClickListener {
-
+	private Handler handler = new Handler();
 	private Button btnWrite;
 	private Button btnRefresh;
 	private ListView list;
@@ -30,8 +30,6 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		try {
 
-			Dao dao = new Dao(getApplicationContext());
-
 			// String testJsonData = dao.getJsonTestData();
 			// dao.insertJsonData(testJsonData);
 
@@ -39,14 +37,9 @@ public class MainActivity extends Activity implements OnClickListener,
 			btnRefresh = (Button) findViewById(R.id.refresh);
 			list = (ListView) findViewById(R.id.lineList);
 
+
 			btnWrite.setOnClickListener(this);
 			btnRefresh.setOnClickListener(this);
-			articleList = dao.getArticleList();
-
-			CustomAdapter customAdapter = new CustomAdapter(this,
-					R.layout.list_line1, articleList);
-			list.setAdapter(customAdapter);
-			list.setOnItemClickListener(this);
 
 			// for (int i = 0; i < 10; i++) {
 			// ListData data = new ListData(i + "-1:lineTitle", i +
@@ -102,4 +95,33 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	}
 
+	private void refreshData(){
+		new Thread(){
+			public void run(){
+				Proxy proxy = new Proxy();
+				Dao dao = new Dao (getApplicationContext());
+				dao.insertJsonData(proxy.getJSON());
+				
+				handler.post(new Runnable(){
+					public void run(){
+						listView();
+					}
+				});
+			}
+		}.start();
+	}
+
+	private void listView() {
+		Dao dao = new Dao(getApplicationContext());
+		articleList = dao.getArticleList();
+		CustomAdapter customAdapter = new CustomAdapter(this,
+				R.layout.list_line1, articleList);
+		list.setAdapter(customAdapter);
+		list.setOnItemClickListener(this);
+	}
+	public void onResume(){
+		super.onResume();
+		refreshData();
+		listView();
+	}
 }
