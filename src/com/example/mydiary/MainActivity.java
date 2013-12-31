@@ -52,12 +52,12 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 		try {
 
 		
-			btnWrite = (Button) findViewById(R.id.write);
-			btnRefresh = (Button) findViewById(R.id.refresh);
+//			btnWrite = (Button) findViewById(R.id.write);
+//			btnRefresh = (Button) findViewById(R.id.refresh);
 			
 			
-			btnWrite.setOnClickListener(this);
-			btnRefresh.setOnClickListener(this);
+//			btnWrite.setOnClickListener(this);
+//			btnRefresh.setOnClickListener(this);
 
 			sideNavigationView = (SideNavigationView)findViewById(R.id.side_navigation_view);
 			sideNavigationView.setMenuItems(R.menu.side_menu);
@@ -117,13 +117,15 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
                     boolean sbviewflag = false;
                     
                     switch (item.getItemId()) {
-                    case R.id.action_item1 :
-                            text ="Action item, with text, displayed if room exists";
-                            break;
+                    case R.id.action_write :
+                    	Intent writeIntent = new Intent(this, Write.class);
+        				startActivity(writeIntent);
+                        break;
                             
-                    case R.id.action_item2 :
-                            text = "Action item, icon only, always displayed";
-                            break;
+                    case R.id.action_refresh :
+        				Intent refresh = new Intent(this, MainActivity.class);
+        				startActivity(refresh);
+        				break;
                     
                     case R.id.action_item3 :
                             text = "Normal menu item";
@@ -154,20 +156,20 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 	@Override
 	public void onClick(View v) {
 		try {
-			switch (v.getId()) {
-			case R.id.write:
-				Intent writeIntent = new Intent(this, Write.class);
-				startActivity(writeIntent);
-				break;
-			case R.id.refresh:
-				Intent refresh = new Intent(this, MainActivity.class);
-				startActivity(refresh);
-				break;
-			// case R.id.lineList:
-			// Intent line1 = new Intent(this, Show.class);
-			// startActivity(line1);
-			// break;
-			}
+//			switch (v.getId()) {
+//			case R.id.write:
+//				Intent writeIntent = new Intent(this, Write.class);
+//				startActivity(writeIntent);
+//				break;
+//			case R.id.refresh:
+//				Intent refresh = new Intent(this, MainActivity.class);
+//				startActivity(refresh);
+//				break;
+//			// case R.id.lineList:
+//			// Intent line1 = new Intent(this, Show.class);
+//			// startActivity(line1);
+//			// break;
+//			}
 
 		} catch (Exception e) {
 			Log.e("main", e.getMessage());
