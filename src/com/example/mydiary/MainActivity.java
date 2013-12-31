@@ -7,19 +7,40 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+//import android.view.Menu;
+//import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener,
-		OnItemClickListener {
+//import com.actionbarsherlock.view.MenuItem;
+//import com.actionbarsherlock.view.Menu;
+
+import android.view.*;
+
+
+import com.devspark.sidenavigation.ISideNavigationCallback;
+import com.devspark.sidenavigation.SideNavigationView;
+import com.devspark.sidenavigation.SideNavigationView.Mode;
+
+
+
+public class MainActivity extends Activity implements OnClickListener, OnItemClickListener 
+{
+	
+	
 	private Handler handler = new Handler();
 	private Button btnWrite;
 	private Button btnRefresh;
 	private ListView list;
+	private SideNavigationView sideNavigationView;
+	
+	
+	
 	ArrayList<ListData> listDataArray = new ArrayList<ListData>();
 	ArrayList<Article> articleList;
 
@@ -30,17 +51,27 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		try {
 
-			// String testJsonData = dao.getJsonTestData();
-			// dao.insertJsonData(testJsonData);
-
+		
 			btnWrite = (Button) findViewById(R.id.write);
 			btnRefresh = (Button) findViewById(R.id.refresh);
-			list = (ListView) findViewById(R.id.lineList);
-
-
+			
+			
 			btnWrite.setOnClickListener(this);
 			btnRefresh.setOnClickListener(this);
 
+			sideNavigationView = (SideNavigationView)findViewById(R.id.side_navigation_view);
+			sideNavigationView.setMenuItems(R.menu.side_menu);
+			sideNavigationView.setMenuClickCallback(sideNavigationCallback);
+			sideNavigationView.setMode(Mode.LEFT);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+			
+			
+			list = (ListView) findViewById(R.id.lineList);
+			
+			refreshData();
+			listView();
+			
 			// for (int i = 0; i < 10; i++) {
 			// ListData data = new ListData(i + "-1:lineTitle", i +
 			// "-2:lineText",
@@ -54,11 +85,71 @@ public class MainActivity extends Activity implements OnClickListener,
 			// listDataArray);// 에러가 난다면 두번째 인자..
 			// listView.setAdapter(listAdapter);
 			// listView.setOnItemClickListener(this);
+			
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.e("oncreate", e.getMessage());
 		}
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		try {
+			// Inflate the menu; this adds items to the action bar if it is
+			// present.
+			getMenuInflater().inflate(R.menu.main, menu);
+			return true;
+
+		} catch (Exception e) {
+			Log.i("onCreateOptionsMenu", e.getMessage());
+		}
+		return false;
+	}
+
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+            
+                    String text = "";
+                    boolean sbviewflag = false;
+                    
+                    switch (item.getItemId()) {
+                    case R.id.action_item1 :
+                            text ="Action item, with text, displayed if room exists";
+                            break;
+                            
+                    case R.id.action_item2 :
+                            text = "Action item, icon only, always displayed";
+                            break;
+                    
+                    case R.id.action_item3 :
+                            text = "Normal menu item";
+                            break;
+                    
+                    case android.R.id.home:
+                 
+                        Log.i("sidebar","home touched!!!");
+                    	
+                    	sideNavigationView.toggleMenu(); 
+                    			
+                       break;
+                    
+                    default :
+                    	return super.onOptionsItemSelected(item);
+                            
+                    }
+                    
+                    if (text != null) {
+                            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();}
+                    
+                    return true;
+           
+    
+	}
+
 
 	@Override
 	public void onClick(View v) {
@@ -119,9 +210,47 @@ public class MainActivity extends Activity implements OnClickListener,
 		list.setAdapter(customAdapter);
 		list.setOnItemClickListener(this);
 	}
+	
 	public void onResume(){
 		super.onResume();
 		refreshData();
 		listView();
 	}
+	
+	
+	ISideNavigationCallback sideNavigationCallback = new ISideNavigationCallback()
+	{
+		@Override
+		public void onSideNavigationItemClick(int itemId)
+		{
+			try
+			{
+				String text="";
+				switch(itemId)
+				{
+					case R.id.side_navigation_menu_add:
+						text="add";
+						break;
+						
+					case R.id.side_navigation_menu_call:
+						text="call";
+						break;
+						
+					case R.id.side_navigation_menu_delete:
+						text="delete";
+						break;
+						
+					case R.id.side_navigation_menu_text:
+						text="text";
+						break;
+					default:
+							text="";
+				}		
+			}	
+			catch(Exception e){
+				Log.i("onSideNavigationItemClick",e.getMessage());
+			}
+				
+		}
+	};
 }

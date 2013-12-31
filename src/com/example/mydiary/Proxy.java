@@ -11,6 +11,7 @@ public class Proxy {
 	
 	public String getJSON(){
 		try{
+			//localhost로 어떻게 옮겨야 할런지 모르겠군여. 집에 있으니 접속이 안됨.ㅋㅋ
 			URL url = new URL("http://10.73.44.93/~stu09/loadData.php");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			//서버의 헤더와 데이터 중 헤더를 세팅하는 작업.
