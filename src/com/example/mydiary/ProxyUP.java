@@ -26,7 +26,7 @@ public class ProxyUP {
                        
                         FileInputStream fis = new FileInputStream(filePath);
                        
-                        URL url = new URL("http://10.73.44.93/~stu09/upload.php");
+                        URL url = new URL("http://10.73.43.76:8080/board/write");
                        
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                        
@@ -48,17 +48,16 @@ public class ProxyUP {
                         // write data
                         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
                        
-                       
                         dos.write( getPostData("title",article.getTitle()).getBytes("UTF-8") );
-                        dos.write( getPostData("writer",article.getWriter()).getBytes("UTF-8") );
-                        dos.write( getPostData("id",article.getId()).getBytes("UTF-8") );
-                        dos.write( getPostData("content",article.getContent()).getBytes("UTF-8") );
-                        dos.write( getPostData("writeDate",article.getWritedate()).getBytes("UTF-8") );
-                        dos.write( getPostData("imgName",article.getImgName()).getBytes("UTF-8") );
+                       // dos.write( getPostData("user",article.getWriter()).getBytes("UTF-8") );
+                        //dos.write( getPostData("id",article.getId()).getBytes("UTF-8") );
+                        dos.write( getPostData("contents",article.getContent()).getBytes("UTF-8") );
+                        //dos.write( getPostData("writeDate",article.getWritedate()).getBytes("UTF-8") );
+                        dos.write( getPostData("file",article.getImgName()).getBytes("UTF-8") );
                    
                    
                         dos.writeBytes(twoHyphens + boundary + lineEnd);
-                        dos.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + article.getImgName() + "\"" + lineEnd);
+                        dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\"" + article.getImgName() + "\"" + lineEnd);
                         dos.writeBytes(lineEnd);
  
  

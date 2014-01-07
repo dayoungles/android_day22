@@ -75,14 +75,11 @@ public class Write extends Activity implements OnClickListener{
 						
 					});
 					String ID = Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-					String DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA).format(new Date());
-					Article article = new Article(
-							"0",
+					//String DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA).format(new Date());
+					Article article = new Article("0",
 							title.getText().toString(),
 							writer.getText().toString(),
-							ID,
 							content.getText().toString(),
-							DATE,
 							fileName
 							);
 				ProxyUP proxyUP = new ProxyUP();
@@ -95,7 +92,6 @@ public class Write extends Activity implements OnClickListener{
 						progressDialog.cancel();
 						finish();
 					}
-					
 				});
 				}
 			}.start();

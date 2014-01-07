@@ -46,23 +46,24 @@ public class CustomAdapter extends ArrayAdapter<Article> {
 			tvText2.setText(listData.get(position).getContent());
 
 			ImageView imageView = (ImageView) row.findViewById(R.id.lineImage);
-/*
-			try {
-				InputStream is = context.getAssets().open(
-						listData.get(position).getImgName());
-				Drawable d = Drawable.createFromStream(is, null);
-				imageView.setImageDrawable(d);
-			} catch (IOException e) {
-				Log.e("Error", "Error:" + e);
-			}
-			*/
-			
-			String img_path = context.getFilesDir().getPath()+"/" + listData.get(position).getImgName();
-			File img_load_path = new File(img_path);
-			Log.i("test", img_path);
-			if(img_load_path.exists()){
-				Bitmap bitmap = BitmapFactory.decodeFile(img_path);
-				imageView.setImageBitmap(bitmap);
+			/*
+			 * try { InputStream is = context.getAssets().open(
+			 * listData.get(position).getImgName()); Drawable d =
+			 * Drawable.createFromStream(is, null);
+			 * imageView.setImageDrawable(d); } catch (IOException e) {
+			 * Log.e("Error", "Error:" + e); }
+			 */
+			String imgName = listData.get(position).getImgName();
+			if (imgName != null) {
+				String img_path = context.getFilesDir().getPath() + "/"
+						+ imgName;
+
+				File img_load_path = new File(img_path);
+				Log.i("test", img_path);
+				if (img_load_path.exists()) {
+					Bitmap bitmap = BitmapFactory.decodeFile(img_path);
+					imageView.setImageBitmap(bitmap);
+				}
 			}
 			return row;
 		} catch (Exception e) {

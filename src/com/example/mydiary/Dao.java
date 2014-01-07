@@ -23,13 +23,12 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 			database = context.openOrCreateDatabase("LocalDATA.db",
 					SQLiteDatabase.CREATE_IF_NECESSARY, null);
 
-			String sql = "Create table if not exists Articles (id integer primary key autoincrement,"
-					+ "ArticleNumber integer unique not null,"
-					+ "Title text not null,"
-					+ "WriterName text not null,"
-					+ "WriterID text not null,"
-					+ "Content text not null,"
-					+ "WriteDate text not null," + "ImgName text not null);";
+			String sql = "Create table if not exists Articles ("
+					+ "id integer not null,"
+					+ "title text not null,"
+					+ "user text,"
+					+ "content text,"
+					+ "fileName text);";
 			database.execSQL(sql);
 
 		} catch (Exception e) {
@@ -39,88 +38,34 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 
 	}
 
-	/**
-	 * JSON파싱을 위한 테스트 문자열입니다. 각 데이터는 다음과 같습니다. ArticleNumber - 글번호 중복X 숫자 Title
-	 * - 글제목 문자열 Writer - 작성자 Id - 작성자ID Content - 글내용 WriteDate - 작성일 ImgName -
-	 * 사진명
-	 */
-	public String getJsonTestData() {//삭제 예정 
-		StringBuilder sb = new StringBuilder();
-		sb.append("");
-		try {
-
-			sb.append("[");
-
-			sb.append("      {");
-			sb.append("         'ArticleNumber':'1',");
-			sb.append("         'Title':'오늘도 좋은 하루',");
-			sb.append("         'Writer':'학생1',");
-			sb.append("         'Id':'6613d02f3e2153283f23bf621145f877',");
-			sb.append("         'Content':'하지만 곧 기말고사지...',");
-			sb.append("         'WriteDate':'2013-09-23-10-10',");
-			sb.append("         'ImgName':'photo1.jpg'");
-			sb.append("      },");
-			sb.append("      {");
-			sb.append("         'ArticleNumber':'2',");
-			sb.append("         'Title':'대출 최고 3000만원',");
-			sb.append("         'Writer':'김미영 팀장',");
-			sb.append("         'Id':'6326d02f3e2153266f23bf621145f734',");
-			sb.append("         'Content':'김미영팀장입니다. 고갱님께서는 최저이율로 최고 3000만원까지 30분 이내 통장입금가능합니다.',");
-			sb.append("         'WriteDate':'2013-09-24-11-22',");
-			sb.append("         'ImgName':'photo2.jpg'");
-			sb.append("      },");
-			sb.append("      {");
-			sb.append("         'ArticleNumber':'3',");
-			sb.append("         'Title':'MAC등록신청',");
-			sb.append("         'Writer':'학생2',");
-			sb.append("         'Id':'8426d02f3e2153283246bf6211454262',");
-			sb.append("         'Content':'1a:2b:3c:4d:5e:6f',");
-			sb.append("         'WriteDate':'2013-09-25-12-33',");
-			sb.append("         'ImgName':'photo3.jpg'");
-			sb.append("      }");
-
-			sb.append("]");
-
-			return sb.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.i("getJsonTestData", e.getMessage());
-		}
-		return sb.toString();
-	}
-
 	public void insertJsonData(String jsonData) {
-
 		FileDownloader fileDownLoader = new FileDownloader(context);
-		String articleNumber;
 		String title;
 		String writer;
 		String id;
-		String content;
-		String writedate;
-		String imgName;
+		String contents;
+		String fileName;
 
 		try {
-			JSONArray jArr = new JSONArray(jsonData);//이녀석이 제이슨을 중괄호 단위로 잘라주었네.
+//			JSONArray jArr = new JSONArray(jsonData);//이녀석이 제이슨을 중괄호 단위로 잘라주었네.
+			JSONObject temp = new JSONObject(jsonData);
+			JSONArray jArr = temp.getJSONArray("list");
 
 			for (int i = 0; i < jArr.length(); i++) {
 				JSONObject jObj = jArr.getJSONObject(i);
-				articleNumber = jObj.getString("ArticleNumber");
-				title = jObj.getString("Title");
-				writer = jObj.getString("Writer");
-				id = jObj.getString("Id");
-				content = jObj.getString("Content");
-				writedate = jObj.getString("WriteDate");
-				imgName = jObj.getString("ImgName");
+				title = jObj.getString("title");
+				writer = jObj.getString("user");
+				id = jObj.getString("id");
+				contents = jObj.getString("contents");
+				fileName = jObj.getString("fileName");
 
-				Log.i("test", "ArticleNumber :::" + articleNumber + "Title : "
+				Log.i("test", "ArticleNumber :::" + id + "Title : "
 						+ title);
 				// String sql =
 				// "INSERT INTO Articles (ArticleNumber, Title, WriterName, WriterID, Content, WriterDate,ImgName) Values("
 				// +article+
-				String sql = "insert into Articles(ArticleNumber, Title, WriterName, WriterID, Content, WriteDate,ImgName) values(?,?,?,?,?,?,?)";
-				String[] array = { articleNumber, title, writer, id, content,
-						writedate, imgName };
+				String sql = "insert into Articles(id, title, user, content, fileName) values(?,?,?,?,?)";
+				String[] array = { id, title, writer, contents, fileName };
 
 				try {
 					database.execSQL(sql, array);
@@ -128,7 +73,7 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 					Log.e("test", "DB error" + e);
 					e.printStackTrace();
 				}
-				fileDownLoader.downFile("http://10.73.44.93/~stu09/image/"+imgName, imgName);
+				fileDownLoader.downFile("http://10.73.43.76:8080/images/"+fileName, fileName);
 			}
 
 		} catch (JSONException e) {
@@ -142,26 +87,22 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 		ArrayList<Article> articleList = new ArrayList<Article>();
 		String articleNumber;
 		String title;
-		String writer;
+		String user;
 		String id;
-		String content;
-		String writedate;
-		String imgName;
+		String contents;
+		String fileName;
 
 		String sql = "select * from Articles;";
 		Cursor cursor = database.rawQuery(sql, null);
 		try {
 			while (cursor.moveToNext()) {
-				articleNumber = cursor.getString(1);
-				title = cursor.getString(2);
-				writer = cursor.getString(3);
-				id = cursor.getString(4);
-				content = cursor.getString(5);
-				writedate = cursor.getString(6);
-				imgName = cursor.getString(7);
+				id = cursor.getString(0);
+				title = cursor.getString(1);
+				user = cursor.getString(2);
+				contents = cursor.getString(3);
+				fileName = cursor.getString(4);
 
-				articleList.add(new Article(articleNumber, title, writer, id,
-						content, writedate, imgName));
+				articleList.add(new Article(id, title, user, contents, fileName));
 			}
 			cursor.close();
 
@@ -179,28 +120,24 @@ public class Dao {// Data ( Db, File 또는 다른 서비스 )에 접근을 제�
 
 		// String articleNumber;
 		String title;
-		String writer;
+		String user;
 		String id;
-		String content;
-		String writedate;
-		String imgName;
+		String contents;
+		String fileName;
 
-		String sql = "select * from Articles where ArticleNumber ="
-				+ articleNumber + ";";
+		String sql = "select * from Articles where id ="+ articleNumber + ";";
 		Cursor cursor = database.rawQuery(sql, null);
 		try {
 			if (cursor.moveToNext()) {// 커서는 원래 첫번째 레코드가 아니라 desc를 가리키고 있으니까.
 										// 넘겨줘야지.
 				// articleNumber = cursor.getString(1);
-				title = cursor.getString(2);
-				writer = cursor.getString(3);
-				id = cursor.getString(4);
-				content = cursor.getString(5);
-				writedate = cursor.getString(6);
-				imgName = cursor.getString(7);
+				articleNumber = cursor.getString(0);
+				title = cursor.getString(1);
+				user = cursor.getString(2);
+				contents = cursor.getString(3);
+				fileName = cursor.getString(4);
 
-				article = new Article(articleNumber + "", title, writer, id,
-						content, writedate, imgName);
+				article = new Article(articleNumber+ "", title, user,contents, fileName);
 			}
 			cursor.close();
 

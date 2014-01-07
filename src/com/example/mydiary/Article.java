@@ -3,29 +3,28 @@ package com.example.mydiary;
 public class Article {
 	private String articleNumber;
 	private String title;
-	private String writer;
+	private String user;
 	private String id;
 	private String content;
-	private String writedate;
+	//private String writedate;
 	private String imgName;
 	
-	public Article (String articleNumber, String title, String writer, String id, String content, String writedate, String imgName){
-		this.articleNumber = articleNumber;
-		this.title = title;
-		this.writer = writer;
+	public Article (String id, String title, String writer, String contents, String file){
 		this.id = id;
-		this.content = content;
-		this.writedate = writedate;
-		this.imgName = imgName;
+		this.title = title;
+		this.user = writer;
+		this.content = contents;
+		//this.writedate = writedate;
+		this.imgName = file;
 		
 	}
 
 	public String getArticleNumber() {
-		return articleNumber;
+		return id;
 	}
 
-	public void setArticleNumber(String articleNumber) {
-		this.articleNumber = articleNumber;
+	public void setArticleNumber(String id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -37,20 +36,13 @@ public class Article {
 	}
 
 	public String getWriter() {
-		return writer;
+		return user;
 	}
 
 	public void setWriter(String writer) {
-		this.writer = writer;
+		this.user = writer;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getContent() {
 		return content;
@@ -60,13 +52,13 @@ public class Article {
 		this.content = content;
 	}
 
-	public String getWritedate() {
-		return writedate;
-	}
-
-	public void setWritedate(String writedate) {
-		this.writedate = writedate;
-	}
+//	public String getWritedate() {
+//		return writedate;
+//	}
+//
+//	public void setWritedate(String writedate) {
+//		this.writedate = writedate;
+//	}
 
 	public String getImgName() {
 		return imgName;

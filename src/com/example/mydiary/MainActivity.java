@@ -123,8 +123,9 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
                         break;
                             
                     case R.id.action_refresh :
-        				Intent refresh = new Intent(this, MainActivity.class);
-        				startActivity(refresh);
+        				//Intent refresh = new Intent(this, MainActivity.class);
+        				//startActivity(refresh);
+                    	refreshData();
         				break;
                     
                     case R.id.action_item3 :
