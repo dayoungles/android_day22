@@ -115,6 +115,7 @@ public class ProxyUP {
        
         // post방식에 맞게 데이터 형식을 추가
         private String getPostData(String key, String value) {
+        	try{
                 String result = twoHyphens + boundary + lineEnd;
                 result += "Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd;
                 result += lineEnd;
@@ -124,6 +125,11 @@ public class ProxyUP {
                 result += lineEnd;
                
                 return result;
+        	}catch(Exception e){
+        		e.printStackTrace();
+        		Log.i("test", e.getMessage());
+        	}
+        	return null;
         }
        
 }

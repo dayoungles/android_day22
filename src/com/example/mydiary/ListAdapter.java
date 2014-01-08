@@ -43,9 +43,10 @@ public class ListAdapter extends ArrayAdapter<ListData> {
 
 			TextView tvText1 = (TextView) row.findViewById(R.id.lineTitle);
 			TextView tvText2 = (TextView) row.findViewById(R.id.lineText);
-
+			String contents = listData.get(position).getText2();
+			contents = contents.substring(0,  20);
 			tvText1.setText(listData.get(position).getText1());
-			tvText2.setText(listData.get(position).getText2());
+			tvText2.setText(contents);
 
 			ImageView imageView = (ImageView) row.findViewById(R.id.lineImage);
 			InputStream is = context.getAssets().open(

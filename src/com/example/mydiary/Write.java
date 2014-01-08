@@ -117,6 +117,7 @@ public class Write extends Activity implements OnClickListener{
 	}
 	
 	private Uri getRealPathUri(Uri uri){
+		try{
 		Uri filePathUri = uri;
 		if(uri.getScheme().toString().compareTo("content")==0){
 			Cursor cursor = getApplicationContext().getContentResolver().query(uri, null,null,null,null);
@@ -128,6 +129,11 @@ public class Write extends Activity implements OnClickListener{
 		}
 		
 		return filePathUri;
+		}catch(Exception e){
+			e.printStackTrace();
+			Log.i("test", e.getMessage());
+		}
+		return null;
 	}
 
 }
